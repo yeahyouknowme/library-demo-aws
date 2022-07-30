@@ -1,22 +1,29 @@
 'use strict';
 
-const express     = require('express');
-const bodyParser  = require('body-parser');
-const cors        = require('cors');
+const express = require('express');
+const cors = require('cors');
 require('dotenv').config();
 
-const apiRoutes         = require('./routes/api.js');
-const fccTestingRoutes  = require('./routes/fcctesting.js');
-const runner            = require('./test-runner');
+const apiRoutes = require('./routes/api.js');
+const runner = require('./test-runner');
+
+const AWS = require('aws-sdk');
+AWS.config.update({region: 'REGION'});
 
 const app = express();
+
+/* const Book = new mongoose.Schema({
+    title: String,
+    comments: Array,
+    commentcount: Number
+}); */
 
 app.use('/public', express.static(process.cwd() + '/public'));
 
 app.use(cors({origin: '*'})); //USED FOR FCC TESTING PURPOSES ONLY!
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 //Index page (static HTML)
 app.route('/')
@@ -24,11 +31,8 @@ app.route('/')
     res.sendFile(process.cwd() + '/views/index.html');
   });
 
-//For FCC testing purposes
-fccTestingRoutes(app);
-
 //Routing for API 
-apiRoutes(app);  
+apiRoutes(app, BookModel);  
     
 //404 Not Found Middleware
 app.use(function(req, res, next) {
