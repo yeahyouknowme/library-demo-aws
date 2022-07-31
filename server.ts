@@ -9,6 +9,7 @@ const runner = require('./test-runner');
 
 const AWS = require('aws-sdk');
 AWS.config.update({region: 'REGION'});
+let dynamodb = new AWS.DynamoDB();
 
 const app = express();
 
@@ -32,8 +33,8 @@ app.route('/')
   });
 
 //Routing for API 
-apiRoutes(app, BookModel);  
-    
+apiRoutes(app, dynamodb);  
+
 //404 Not Found Middleware
 app.use(function(req, res, next) {
   res.status(404)
