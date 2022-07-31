@@ -7,7 +7,7 @@ require('dotenv').config();
 const apiRoutes = require('./routes/api.js');
 
 const AWS = require('aws-sdk');
-AWS.config.update({region: 'REGION'});
+AWS.config.update({region: 'us-west-2'});
 let dynamodb = new AWS.DynamoDB();
 
 const app = express();
