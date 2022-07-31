@@ -21,7 +21,7 @@ const app = express();
 
 app.use('/public', express.static(process.cwd() + '/public'));
 
-app.use(cors({origin: '*'})); //USED FOR FCC TESTING PURPOSES ONLY!
+app.use(cors({origin: '*'})); 
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
