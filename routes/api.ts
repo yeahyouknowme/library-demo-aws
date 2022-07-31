@@ -1,7 +1,7 @@
 'use strict';
-import {v4 as uuidv4} from 'uuid';
+const uuidv4 = require('uuid').v4;
 
-exports = function (app, dynamodb) {
+module.exports = function apiRoutes(app, dynamodb) {
 
     app.route('/api/books')
         .get(function (req, res){
@@ -39,7 +39,7 @@ exports = function (app, dynamodb) {
                     ReturnConsumedCapacity: 'TOTAL'
                 }
                 // POST - create a new book
-                dynamodb.put(params, function (err, data) {
+                dynamodb.putItem(params, function (err, data) {
                     if (err) {
                         res.json('error '.concat(err));
                     } else {
@@ -107,7 +107,7 @@ exports = function (app, dynamodb) {
                 }
             }
             //GET - find book by ID
-            dynamodb.get(params, function (err, data) {
+            dynamodb.getItem(params, function (err, data) {
                 if (err){
                     res.json('error: no book found with id '.concat(bookID));
                 } else {
@@ -146,7 +146,7 @@ exports = function (app, dynamodb) {
                 ReturnValues: "ALL_NEW"
             } 
             //POST - add a comment to a book
-            dynamodb.update(params, function (err, data) {
+            dynamodb.updateItem(params, function (err, data) {
                 if(!comment) res.json('missing required field "Comment"');
                 if (err) {
                     res.json('error: no book found with id '.concat(bookID));
@@ -172,7 +172,7 @@ exports = function (app, dynamodb) {
                 },
             }
             //DELETE - delete a book
-            dynamodb.delete(params, function (err, data) {
+            dynamodb.deleteItem(params, function (err, data) {
                 if (err) {
                     res.json('error: no book found with id '.concat(bookID));
                 } else {
