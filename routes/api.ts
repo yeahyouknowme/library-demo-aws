@@ -146,7 +146,7 @@ module.exports = function apiRoutes(app, dynamodb) {
             dynamodb.updateItem(params, function (err, data) {
                 if(!comment) res.json('missing required field "Comment"');
                 if (err) {
-                    res.json('error: ' + err + ' \n' + JSON.stringify(req));
+                    res.json('error: ' + err + ' \n' + JSON.parse(req));
                 } else {
                     res.send({
                         id: data.Attributes.id,
