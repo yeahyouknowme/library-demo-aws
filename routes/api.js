@@ -119,7 +119,7 @@ module.exports = function apiRoutes(app, dynamodb) {
     })
         .post(function (req, res) {
         let bookID = req.params.id;
-        let comment = req.body.comment;
+        let comment = req.params.comment;
         console.log(req.body);
         let params = {
             TableName: 'books',
