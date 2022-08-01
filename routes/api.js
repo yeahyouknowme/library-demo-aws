@@ -63,29 +63,38 @@ module.exports = function apiRoutes(app, dynamodb) {
             if (err) {
                 res.json('error '.concat(err));
             }
-        });
-        let newTableParams = {
-            TableName: 'books',
-            AttributeDefinitions: [
-                {
-                    AttributeName: 'value',
-                    AttributeType: 'S'
-                }
-            ],
-            KeySchema: [
-                {
-                    AttributeName: 'id',
-                    KeyType: 'HASH'
-                }
-            ],
-            BillingMode: 'PAY_PER_REQUEST'
-        };
-        dynamodb.createTable(newTableParams, function (err, data) {
-            if (err) {
-                res.json('error '.concat(err));
-            }
             else {
-                res.json('complete delete successful');
+                dynamodb.waitFor('tableNotExists', { TableName: 'books' }, function (err, data) {
+                    if (err) {
+                        console.log("error: " + err);
+                    }
+                    else {
+                        let newTableParams = {
+                            TableName: 'books',
+                            AttributeDefinitions: [
+                                {
+                                    AttributeName: 'value',
+                                    AttributeType: 'S'
+                                }
+                            ],
+                            KeySchema: [
+                                {
+                                    AttributeName: 'id',
+                                    KeyType: 'HASH'
+                                }
+                            ],
+                            BillingMode: 'PAY_PER_REQUEST'
+                        };
+                        dynamodb.createTable(newTableParams, function (err, data) {
+                            if (err) {
+                                res.json('error '.concat(err));
+                            }
+                            else {
+                                res.json('complete delete successful');
+                            }
+                        });
+                    }
+                });
             }
         });
     });
