@@ -66,30 +66,29 @@ module.exports = function apiRoutes(app, dynamodb) {
             dynamodb.deleteTable(deleteParams, function(err, data) {
                 if (err) {
                     res.json('error '.concat(err));
-                } else {
-                    let newTableParams = {
-                        TableName: 'books',
-                        AttributeDefinitions: [
-                            {
-                                AttributeName: 'value',
-                                AttributeType: 'S'
-                            }
-                        ],
-                        KeySchema: [
-                            {
-                                AttributeName: 'id',
-                                KeyType: 'HASH'
-                            }
-                        ],
-                        BillingMode: 'PAY_PER_REQUEST'
+                } 
+            })
+            let newTableParams = {
+                TableName: 'books',
+                AttributeDefinitions: [
+                    {
+                        AttributeName: 'value',
+                        AttributeType: 'S'
                     }
-                    dynamodb.createTable(newTableParams, function(err, data) {
-                        if (err) {
-                            res.json('error '.concat(err));
-                        } else {
-                            res.json('complete delete successful');
-                        }
-                    })
+                ],
+                KeySchema: [
+                    {
+                        AttributeName: 'id',
+                        KeyType: 'HASH'
+                    }
+                ],
+                BillingMode: 'PAY_PER_REQUEST'
+            }
+            dynamodb.createTable(newTableParams, function(err, data) {
+                if (err) {
+                    res.json('error '.concat(err));
+                } else {
+                    res.json('complete delete successful');
                 }
             })
         });
