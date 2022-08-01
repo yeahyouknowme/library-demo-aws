@@ -52,51 +52,6 @@ module.exports = function apiRoutes(app, dynamodb) {
         else {
             res.json('missing required field "Book Title"');
         }
-    })
-        .delete(function (req, res) {
-        //if successful response will be 'complete delete successful'
-        //DELETE - delete all books
-        let deleteParams = {
-            TableName: 'books'
-        };
-        dynamodb.deleteTable(deleteParams, function (err, data) {
-            if (err) {
-                res.json('error '.concat(err));
-            }
-            else {
-                dynamodb.waitFor('tableNotExists', { TableName: 'books' }, function (err, data) {
-                    if (err) {
-                        console.log("error: " + err);
-                    }
-                    else {
-                        let newTableParams = {
-                            TableName: 'books',
-                            AttributeDefinitions: [
-                                {
-                                    AttributeName: 'value',
-                                    AttributeType: 'S'
-                                }
-                            ],
-                            KeySchema: [
-                                {
-                                    AttributeName: 'id',
-                                    KeyType: 'HASH'
-                                }
-                            ],
-                            BillingMode: 'PAY_PER_REQUEST'
-                        };
-                        dynamodb.createTable(newTableParams, function (err, data) {
-                            if (err) {
-                                res.json('error '.concat(err));
-                            }
-                            else {
-                                res.json('complete delete successful');
-                            }
-                        });
-                    }
-                });
-            }
-        });
     });
     app.route('/api/books/:id')
         .get(function (req, res) {
