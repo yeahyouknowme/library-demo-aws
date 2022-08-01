@@ -64,15 +64,4 @@ $(document).ready(function () {
             }
         });
     });
-    $('#deleteAllBooks').click(function () {
-        $.ajax({
-            url: '/api/books',
-            type: 'delete',
-            dataType: 'json',
-            data: $('#newBookForm').serialize(),
-            success: function (data) {
-                //update list
-            }
-        });
-    });
 });
