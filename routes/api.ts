@@ -122,8 +122,8 @@ module.exports = function apiRoutes(app, dynamodb) {
         })
         .post(function(req, res){
             let bookID = req.params.id;
-            let comment = req.params.comment;
-            console.log(req.body);
+            let comment = req.body.comment;
+            console.log(req);
 
             let params = {
                 TableName: 'books',
@@ -147,7 +147,7 @@ module.exports = function apiRoutes(app, dynamodb) {
             dynamodb.updateItem(params, function (err, data) {
                 if(!comment) res.json('missing required field "Comment"');
                 if (err) {
-                    res.json('error: ' + err + '\n' + req.body);
+                    res.json('error: ' + err + '\n' + req);
                 } else {
                     res.send({
                         id: data.Attributes.id,
