@@ -131,7 +131,7 @@ module.exports = function apiRoutes(app, dynamodb) {
                 "#c": "commentcount",
                 "#c1": "comments"
             },
-            UpdateExpression: 'SET #c = #c + 1, #c1 = list_append(#c1, ' + [comment] + ')',
+            UpdateExpression: 'SET #c = #c + "1", #c1 = list_append(#c1, ' + [comment] + ')',
             ReturnValues: "ALL_NEW"
         };
         //POST - add a comment to a book
