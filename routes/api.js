@@ -123,7 +123,7 @@ module.exports = function apiRoutes(app, dynamodb) {
         let params = {
             TableName: 'books',
             Key: {
-                "uuid": {
+                "id": {
                     S: bookID
                 }
             },
