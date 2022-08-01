@@ -7,7 +7,7 @@ module.exports = function apiRoutes(app, dynamodb) {
         //json res format: [{"id": bookid, "title": book_title, "commentcount": num_of_comments },...]
         let params = {
             TableName: 'books',
-            ProjectionExpression: 'uuid, title, commentcount',
+            ProjectionExpression: 'id, title, commentcount',
         };
         //scan all books in db
         dynamodb.scan(params, function (err, data) {
@@ -29,7 +29,7 @@ module.exports = function apiRoutes(app, dynamodb) {
             let params = {
                 TableName: 'books',
                 Item: {
-                    'uuid': { S: newUUID },
+                    'id': { S: newUUID },
                     'title': { S: title },
                     'comments': { L: [] },
                     'commentcount': { N: '0' }
@@ -74,7 +74,7 @@ module.exports = function apiRoutes(app, dynamodb) {
                     ],
                     KeySchema: [
                         {
-                            AttributeName: 'uuid',
+                            AttributeName: 'id',
                             KeyType: 'HASH'
                         }
                     ],
@@ -98,7 +98,7 @@ module.exports = function apiRoutes(app, dynamodb) {
         let params = {
             TableName: 'books',
             Key: {
-                'uuid': {
+                'id': {
                     S: bookID
                 }
             }
@@ -110,7 +110,7 @@ module.exports = function apiRoutes(app, dynamodb) {
             }
             else {
                 res.send({
-                    "id": data.Item.uuid,
+                    "id": data.Item.id,
                     "title": data.Item.title,
                     "comments": data.Item.comments
                 });
@@ -151,7 +151,7 @@ module.exports = function apiRoutes(app, dynamodb) {
             }
             else {
                 res.send({
-                    id: data.Attributes.uuid,
+                    id: data.Attributes.id,
                     title: data.Attributes.title,
                     comments: data.Attributes.comments
                 });
