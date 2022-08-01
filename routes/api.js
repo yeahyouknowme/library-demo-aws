@@ -120,6 +120,7 @@ module.exports = function apiRoutes(app, dynamodb) {
         .post(function (req, res) {
         let bookID = req.params.id;
         let comment = req.body.comment;
+        console.log(req.body);
         let params = {
             TableName: 'books',
             Key: {
@@ -132,7 +133,7 @@ module.exports = function apiRoutes(app, dynamodb) {
                 "#c": "comments"
             },
             ExpressionAttributeValues: {
-                ":inc": { N: 1 },
+                ":inc": { N: "1" },
                 ":comment": { L: [comment] }
             },
             UpdateExpression: 'ADD #cc :inc, SET #c = list_append(#c, :comment)',
