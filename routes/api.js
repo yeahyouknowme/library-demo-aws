@@ -133,7 +133,7 @@ module.exports = function apiRoutes(app, dynamodb) {
             },
             ExpressionAttributeValues: {
                 ":c": {
-                    L: comment
+                    L: [comment]
                 },
                 ":c1": {
                     N: "1"
