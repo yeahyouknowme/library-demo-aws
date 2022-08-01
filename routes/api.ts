@@ -6,18 +6,18 @@ module.exports = function apiRoutes(app, dynamodb) {
     app.route('/api/books')
         .get(function (req, res){
             //response will be array of book objects
-            //json res format: [{"_id": bookid, "title": book_title, "commentcount": num_of_comments },...]
+            //json res format: [{"id": bookid, "title": book_title, "commentcount": num_of_comments },...]
             
             let params = {
                 TableName: 'books',
-                ProjectionExpression: '_id, title, commentcount',
+                ProjectionExpression: 'uuid, title, commentcount',
             }
             //scan all books in db
             dynamodb.scan(params, function(err, data) {
                 if (err) {
                     res.send('error: ' + err);
                 } else {
-                    res.json(data.Items);
+                    res.json(data);
                 }
             });
             //err: res.json('error '.concat(err))
@@ -25,13 +25,14 @@ module.exports = function apiRoutes(app, dynamodb) {
         })
         .post(function (req, res){
             let title = req.body.title;
-            //response will contain new book object including atleast _id and title
+            let newUUID = uuidv4();
+            //response will contain new book object including atleast id and title
 
             if(title) {
                 let params = {
                     TableName: 'books',
                     Item: {
-                        'uuid': {S: uuidv4()},
+                        'uuid': {S: newUUID},
                         'title': {S: title},
                         'comments': {L: []},
                         'commentcount': {N: '0'}
@@ -44,8 +45,8 @@ module.exports = function apiRoutes(app, dynamodb) {
                         res.json('error '.concat(err));
                     } else {
                         res.send({
-                            id: data.uuid,
-                            title: data.title
+                            "id": newUUID,
+                            "title": title
                         });
                     }
                 })
@@ -112,9 +113,9 @@ module.exports = function apiRoutes(app, dynamodb) {
                     res.json('error: no book found with id '.concat(bookID));
                 } else {
                     res.send({
-                        id: data.Item.uuid,
-                        title: data.Item.title,
-                        comments: data.Item.comments
+                        "id": data.Item.uuid,
+                        "title": data.Item.title,
+                        "comments": data.Item.comments
                     })
                 }
             })
