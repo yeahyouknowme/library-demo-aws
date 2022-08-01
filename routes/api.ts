@@ -136,8 +136,8 @@ module.exports = function apiRoutes(app, dynamodb) {
                     "#c": "comments"
                 },
                 ExpressionAttributeValues: {
-                    ":inc": 1,
-                    ":comment": [comment]
+                    ":inc": {N: 1},
+                    ":comment": {L: [comment]}
                 },
                 UpdateExpression: 'ADD #cc :inc, SET #c = list_append(#c, :comment)',
                 ReturnValues: "ALL_NEW"
